@@ -1,3 +1,4 @@
+import { startAmbientAudio } from './useAudio'
 import { useEffect, useState } from 'react'
 import Background from './Background'
 
@@ -15,8 +16,25 @@ function WelcomeScreen({ onStart }) {
     }
   }, [])
 
+  useEffect(() => {
+    function handleFirstInteraction() {
+      startAmbientAudio()
+      window.removeEventListener('click', handleFirstInteraction)
+      window.removeEventListener('keydown', handleFirstInteraction)
+    }
+
+    window.addEventListener('click', handleFirstInteraction)
+    window.addEventListener('keydown', handleFirstInteraction)
+
+    return () => {
+      window.removeEventListener('click', handleFirstInteraction)
+      window.removeEventListener('keydown', handleFirstInteraction)
+    }
+  }, [])
+
   function handleKeyDown(e) {
     if (e.key === 'Enter' && inputValue.trim()) {
+      startAmbientAudio()
       onStart(inputValue.trim())
     }
   }
@@ -80,8 +98,9 @@ function WelcomeScreen({ onStart }) {
           opacity: textVisible ? 1 : 0,
           transform: textVisible ? 'translateY(0)' : 'translateY(12px)',
           transition: 'opacity 1.8s ease, transform 1.8s ease',
-          maxWidth: '520px',
-          padding: '0 24px'
+          maxWidth: '800px',
+          padding: '0 24px',
+          whiteSpace: 'nowrap'
         }}>
           How are you doing today?
         </h1>
@@ -152,7 +171,10 @@ function WelcomeScreen({ onStart }) {
             margin: '14px 0 0 0',
             fontFamily: "'Segoe UI', sans-serif",
             letterSpacing: '0.03em',
-            display: inputValue ? 'none' : 'block'
+            opacity: inputValue ? 0 : 1,
+            transform: inputValue ? 'translateY(-4px)' : 'translateY(0)',
+            transition: 'opacity 0.4s ease, transform 0.4s ease',
+            pointerEvents: inputValue ? 'none' : 'auto'
           }}>
             press enter to begin
           </p>
