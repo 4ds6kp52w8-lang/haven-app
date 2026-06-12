@@ -3,6 +3,7 @@ import WelcomeScreen from './WelcomeScreen'
 import HomeScreen from './HomeScreen'
 import ChatScreen from './ChatScreen'
 import Background from './Background'
+import JournalScreen from './JournalScreen'
 
 function App() {
   const [screen, setScreen] = useState('home')
@@ -27,6 +28,10 @@ function App() {
 
   if (screen === 'chat') {
     return <ChatScreen firstMessage={firstMessage} />
+  }
+
+  if (screen === 'journal') {
+    return <JournalScreen onBack={() => setScreen('home')} />
   }
 
   return (
