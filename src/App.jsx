@@ -5,6 +5,7 @@ import ChatScreen from './ChatScreen'
 import Background from './Background'
 import JournalScreen from './JournalScreen'
 import MeditateScreen from './MeditateScreen'
+import MoodScreen from './MoodScreen'
 
 function App() {
   const [screen, setScreen] = useState('home')
@@ -24,7 +25,7 @@ function App() {
   }
 
   if (screen === 'welcome') {
-    return <WelcomeScreen onStart={handleWelcomeStart} />
+    return <WelcomeScreen onStart={handleWelcomeStart} onBack={() => setScreen('home')} />
   }
 
   if (screen === 'chat') {
@@ -37,6 +38,10 @@ function App() {
 
   if (screen === 'meditate') {
     return <MeditateScreen onBack={() => setScreen('home')} />
+  }
+
+  if (screen === 'mood') {
+    return <MoodScreen onBack={() => setScreen('home')} />
   }
 
   return (

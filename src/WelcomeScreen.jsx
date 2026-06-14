@@ -2,7 +2,7 @@ import { startAmbientAudio } from './useAudio'
 import { useEffect, useState } from 'react'
 import Background from './Background'
 
-function WelcomeScreen({ onStart }) {
+function WelcomeScreen({ onStart, onBack }) {
   const [inputVisible, setInputVisible] = useState(false)
   const [textVisible, setTextVisible] = useState(false)
   const [inputValue, setInputValue] = useState('')
@@ -66,7 +66,28 @@ function WelcomeScreen({ onStart }) {
         justifyContent: 'center',
         zIndex: 1
       }}>
-
+        {/* Back button */}
+        <button
+          onClick={onBack}
+          style={{
+            position: 'absolute',
+            top: '32px',
+            left: '36px',
+            background: 'none',
+            border: 'none',
+            color: 'rgba(255,255,255,0.50)',
+            fontSize: '13px',
+            cursor: 'pointer',
+            letterSpacing: '0.04em',
+            fontFamily: "'Segoe UI', sans-serif",
+            padding: 0,
+            opacity: textVisible ? 1 : 0,
+            transition: 'opacity 1.5s ease'
+          }}
+        >
+          ← Home
+        </button>
+        
         {/* Haven wordmark */}
         <div style={{
           position: 'absolute',
