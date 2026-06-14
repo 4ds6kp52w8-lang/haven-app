@@ -4,6 +4,7 @@ import HomeScreen from './HomeScreen'
 import ChatScreen from './ChatScreen'
 import Background from './Background'
 import JournalScreen from './JournalScreen'
+import MeditateScreen from './MeditateScreen'
 
 function App() {
   const [screen, setScreen] = useState('home')
@@ -32,6 +33,10 @@ function App() {
 
   if (screen === 'journal') {
     return <JournalScreen onBack={() => setScreen('home')} />
+  }
+
+  if (screen === 'meditate') {
+    return <MeditateScreen onBack={() => setScreen('home')} />
   }
 
   return (
