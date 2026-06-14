@@ -96,6 +96,27 @@ function HomeScreen({ onNavigate }) {
           Haven
         </div>
 
+        {/* Settings icon */}
+        <button
+          onClick={() => onNavigate('settings')}
+          style={{
+            position: 'absolute',
+            top: '20px',
+            right: '32px',
+            background: 'none',
+            border: 'none',
+            color: 'rgba(255,255,255,0.40)',
+            fontSize: '22px',
+            cursor: 'pointer',
+            padding: '4px',
+            transition: 'color 0.2s ease'
+          }}
+          onMouseEnter={e => e.target.style.color = 'rgba(255,255,255,0.80)'}
+          onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.40)'}
+        >
+          ⚙
+        </button>
+
         {/* Greeting */}
         <h1 style={{
           color: 'rgba(255,255,255,0.92)',

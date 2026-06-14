@@ -6,6 +6,9 @@ import Background from './Background'
 import JournalScreen from './JournalScreen'
 import MeditateScreen from './MeditateScreen'
 import MoodScreen from './MoodScreen'
+import BreatheScreen from './BreatheScreen'
+import MusicScreen from './MusicScreen'
+import SettingsScreen from './SettingsScreen'
 
 function App() {
   const [screen, setScreen] = useState('home')
@@ -42,6 +45,18 @@ function App() {
 
   if (screen === 'mood') {
     return <MoodScreen onBack={() => setScreen('home')} />
+  }
+
+  if (screen === 'breathe') {
+    return <BreatheScreen onBack={() => setScreen('home')} />
+  }
+
+  if (screen === 'music') {
+    return <MusicScreen onBack={() => setScreen('home')} />
+  }
+
+  if (screen === 'settings') {
+    return <SettingsScreen onBack={() => setScreen('home')} />
   }
 
   return (
