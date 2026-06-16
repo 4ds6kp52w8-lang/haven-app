@@ -1,12 +1,12 @@
 import { startAmbientAudio } from './useAudio'
-import { useEffect, useState } from 'react'
 import Background from './Background'
+import { shouldShowMoodCheck } from './useMoodCheck'
+import { useEffect, useState } from 'react'
 
 function WelcomeScreen({ onStart, onBack }) {
   const [inputVisible, setInputVisible] = useState(false)
   const [textVisible, setTextVisible] = useState(false)
   const [inputValue, setInputValue] = useState('')
-
   useEffect(() => {
     const textTimer = setTimeout(() => setTextVisible(true), 1200)
     const inputTimer = setTimeout(() => setInputVisible(true), 2400)
