@@ -247,7 +247,7 @@ export function playResponseBloom() {
 
     const startTime = now + i * 0.07
     gain.gain.setValueAtTime(0, startTime)
-    gain.gain.linearRampToValueAtTime(0.035, startTime + 0.05)
+    gain.gain.linearRampToValueAtTime(0.12, startTime + 0.05)
     gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 3.5)
 
     osc.connect(gain)

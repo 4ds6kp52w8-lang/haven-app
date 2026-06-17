@@ -78,6 +78,79 @@ const CATEGORY_COLORS = {
   'Relax':     'rgba(180, 140, 220, 0.25)'
 }
 
+function BreathingOrb({ phase, running, secondsLeft, totalSeconds }) {
+  const orbRef = useRef(null)
+  const scaleRef = useRef(1)
+
+  useEffect(() => {
+    if (!orbRef.current) return
+    const isInhale = phase.toLowerCase().includes('inhale')
+    const isExhale = phase.toLowerCase().includes('exhale')
+    const targetScale = isInhale ? 1.35 : isExhale ? 0.75 : scaleRef.current
+    const duration = totalSeconds * 1000
+    orbRef.current.style.transition = `transform ${duration}ms ease-in-out`
+    orbRef.current.style.transform = `scale(${targetScale})`
+    scaleRef.current = targetScale
+  }, [phase, running])
+
+  return (
+    <div style={{
+      position: 'relative',
+      width: '200px',
+      height: '200px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>
+      <div style={{
+        position: 'absolute',
+        width: '200px',
+        height: '200px',
+        borderRadius: '50%',
+        background: 'radial-gradient(circle, rgba(100,160,255,0.15) 0%, transparent 70%)',
+        filter: 'blur(20px)'
+      }} />
+
+      <div
+        ref={orbRef}
+        style={{
+          width: '160px',
+          height: '160px',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle at 40% 40%, rgba(180,200,255,0.35), rgba(100,130,255,0.20))',
+          backdropFilter: 'blur(20px)',
+          border: '1px solid rgba(255,255,255,0.25)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'column',
+          gap: '4px',
+          transition: 'transform 4s ease-in-out'
+        }}
+      >
+        <span style={{
+          color: 'rgba(255,255,255,0.90)',
+          fontSize: '15px',
+          fontWeight: '300',
+          letterSpacing: '0.04em',
+          fontFamily: "'Georgia', serif"
+        }}>
+          {running ? phase : 'Ready'}
+        </span>
+        {running && (
+          <span style={{
+            color: 'rgba(255,255,255,0.45)',
+            fontSize: '24px',
+            fontWeight: '200'
+          }}>
+            {secondsLeft}
+          </span>
+        )}
+      </div>
+    </div>
+  )
+}
+
 function BreatheScreen({ onBack }) {
   const [view, setView] = useState('home')
   const [selected, setSelected] = useState(null)
@@ -90,8 +163,6 @@ function BreatheScreen({ onBack }) {
   const [sessionSecondsLeft, setSessionSecondsLeft] = useState(3 * 60)
   const timerRef = useRef(null)
   const sessionTimerRef = useRef(null)
-  const orbScale = useRef(1)
-  const orbRef = useRef(null)
 
   useEffect(() => {
     setTimeout(() => setVisible(true), 100)
@@ -110,18 +181,6 @@ function BreatheScreen({ onBack }) {
     }
     return () => clearTimeout(timerRef.current)
   }, [running, secondsLeft])
-
-  useEffect(() => {
-    if (!orbRef.current || !selected) return
-    const phase = selected?.phases[phaseIndex]
-    const isInhale = phase?.label.toLowerCase().includes('inhale')
-    const isExhale = phase?.label.toLowerCase().includes('exhale')
-    const targetScale = isInhale ? 1.35 : isExhale ? 0.75 : orbScale.current
-    const duration = (phase?.duration || 4) * 1000
-    orbRef.current.style.transition = `transform ${duration}ms ease-in-out`
-    orbRef.current.style.transform = `scale(${targetScale})`
-    orbScale.current = targetScale
-  }, [phaseIndex, running])
 
   useEffect(() => {
     if (running && sessionSecondsLeft > 0) {
@@ -159,10 +218,6 @@ function BreatheScreen({ onBack }) {
     setCycles(0)
     setSessionSecondsLeft(targetMinutes * 60)
     clearInterval(sessionTimerRef.current)
-    if (orbRef.current) {
-      orbRef.current.style.transition = 'transform 0.5s ease'
-      orbRef.current.style.transform = 'scale(1)'
-    }
   }
 
   function formatSessionTime(s) {
@@ -261,16 +316,13 @@ function BreatheScreen({ onBack }) {
 
           {/* HOME VIEW */}
           {view === 'home' && (
-            <div style={{
-              maxWidth: '640px',
-              margin: '0 auto'
-            }}>
+            <div style={{ maxWidth: '100%', margin: '0', padding: '0' }}>
               <h2 style={{
                 color: 'rgba(255,255,255,0.85)',
                 fontSize: '22px',
                 fontWeight: '300',
                 fontFamily: "'Georgia', serif",
-                margin: '0 0 8px 0'
+                margin: '0 0 8px 36px'
               }}>
                 Breathing Techniques
               </h2>
@@ -278,24 +330,25 @@ function BreatheScreen({ onBack }) {
                 color: 'rgba(255,255,255,0.40)',
                 fontSize: '14px',
                 fontWeight: '300',
-                margin: '0 0 36px 0',
+                margin: '0 0 28px 36px',
                 lineHeight: '1.6'
               }}>
                 Choose a technique based on how you're feeling right now.
               </p>
 
               <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '12px'
+                display: 'grid',
+                gridTemplateColumns: 'repeat(2, 1fr)',
+                gap: '14px',
+                padding: '0 36px'
               }}>
                 {TECHNIQUES.map((technique, i) => (
                   <div
                     key={technique.id}
                     onClick={() => startSession(technique)}
                     style={{
-                      padding: '22px 26px',
-                      borderRadius: '20px',
+                      padding: '28px 28px',
+                      borderRadius: '24px',
                       background: 'rgba(255,255,255,0.08)',
                       backdropFilter: 'blur(20px)',
                       border: '1px solid rgba(255,255,255,0.13)',
@@ -305,14 +358,13 @@ function BreatheScreen({ onBack }) {
                       animationDelay: `${i * 0.07}s`,
                       opacity: 0,
                       display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      gap: '16px'
+                      flexDirection: 'column',
+                      gap: '14px'
                     }}
                     onMouseEnter={e => {
                       e.currentTarget.style.background = 'rgba(255,255,255,0.14)'
                       e.currentTarget.style.border = '1px solid rgba(255,255,255,0.22)'
-                      e.currentTarget.style.transform = 'translateY(-1px)'
+                      e.currentTarget.style.transform = 'translateY(-2px)'
                     }}
                     onMouseLeave={e => {
                       e.currentTarget.style.background = 'rgba(255,255,255,0.08)'
@@ -327,57 +379,68 @@ function BreatheScreen({ onBack }) {
                       }
                     `}</style>
 
-                    <div style={{ flex: 1 }}>
-                      <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px',
-                        marginBottom: '6px'
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{
+                        padding: '6px 16px',
+                        borderRadius: '20px',
+                        background: CATEGORY_COLORS[technique.category],
+                        color: 'rgba(255,255,255,0.95)',
+                        fontSize: '11px',
+                        letterSpacing: '0.08em',
+                        fontWeight: '600',
+                        textTransform: 'uppercase',
+                        border: '1px solid rgba(255,255,255,0.20)'
                       }}>
-                        <span style={{
-                          padding: '3px 10px',
-                          borderRadius: '12px',
-                          background: CATEGORY_COLORS[technique.category],
-                          color: 'rgba(255,255,255,0.75)',
-                          fontSize: '10px',
-                          letterSpacing: '0.06em',
-                          fontWeight: '500'
-                        }}>
-                          {technique.category}
-                        </span>
-                        <span style={{
-                          color: 'rgba(255,255,255,0.30)',
-                          fontSize: '11px'
-                        }}>
-                          {technique.phases.map(p => p.duration).join('-')}
-                        </span>
-                      </div>
-
-                      <div style={{
-                        color: 'rgba(255,255,255,0.88)',
-                        fontSize: '15px',
-                        fontWeight: '400',
-                        marginBottom: '4px'
-                      }}>
-                        {technique.name}
-                      </div>
-
-                      <div style={{
+                        {technique.category}
+                      </span>
+                      <span style={{
                         color: 'rgba(255,255,255,0.40)',
-                        fontSize: '12px',
-                        fontWeight: '300',
-                        lineHeight: '1.5'
+                        fontSize: '13px',
+                        letterSpacing: '0.04em',
+                        fontWeight: '300'
                       }}>
-                        {technique.description}
-                      </div>
+                        {technique.phases.map(p => p.duration).join('-')}
+                      </span>
                     </div>
 
                     <div style={{
-                      color: 'rgba(255,255,255,0.25)',
+                      color: 'rgba(255,255,255,0.92)',
                       fontSize: '18px',
-                      flexShrink: 0
+                      fontWeight: '400',
+                      fontFamily: "'Georgia', serif",
+                      lineHeight: '1.3'
                     }}>
-                      ›
+                      {technique.name}
+                    </div>
+
+                    <div style={{
+                      color: 'rgba(255,255,255,0.45)',
+                      fontSize: '13px',
+                      fontWeight: '300',
+                      lineHeight: '1.6'
+                    }}>
+                      {technique.description}
+                    </div>
+
+                    <div style={{
+                      display: 'flex',
+                      gap: '6px',
+                      flexWrap: 'wrap',
+                      marginTop: '4px'
+                    }}>
+                      {technique.phases.map((phase, pi) => (
+                        <span key={pi} style={{
+                          padding: '3px 10px',
+                          borderRadius: '10px',
+                          background: 'rgba(255,255,255,0.06)',
+                          border: '1px solid rgba(255,255,255,0.10)',
+                          color: 'rgba(255,255,255,0.40)',
+                          fontSize: '11px',
+                          fontWeight: '300'
+                        }}>
+                          {phase.label} {phase.duration}s
+                        </span>
+                      ))}
                     </div>
                   </div>
                 ))}
@@ -394,7 +457,6 @@ function BreatheScreen({ onBack }) {
               textAlign: 'center',
               width: '100%'
             }}>
-
               <h2 style={{
                 color: 'rgba(255,255,255,0.70)',
                 fontSize: '16px',
@@ -457,12 +519,7 @@ function BreatheScreen({ onBack }) {
                 }}>
                   <div style={{ position: 'relative', width: '60px', height: '60px' }}>
                     <svg width="60" height="60" style={{ transform: 'rotate(-90deg)' }}>
-                      <circle
-                        cx="30" cy="30" r="26"
-                        fill="none"
-                        stroke="rgba(255,255,255,0.10)"
-                        strokeWidth="2"
-                      />
+                      <circle cx="30" cy="30" r="26" fill="none" stroke="rgba(255,255,255,0.10)" strokeWidth="2" />
                       <circle
                         cx="30" cy="30" r="26"
                         fill="none"
@@ -507,52 +564,12 @@ function BreatheScreen({ onBack }) {
                 justifyContent: 'center',
                 marginBottom: '40px'
               }}>
-                <div style={{
-                  position: 'absolute',
-                  width: '200px',
-                  height: '200px',
-                  borderRadius: '50%',
-                  background: 'radial-gradient(circle, rgba(100,160,255,0.15) 0%, transparent 70%)',
-                  filter: 'blur(20px)'
-                }} />
-
-                <div
-                  ref={orbRef}
-                  style={{
-                    width: '160px',
-                    height: '160px',
-                    borderRadius: '50%',
-                    background: 'radial-gradient(circle at 40% 40%, rgba(180,200,255,0.35), rgba(100,130,255,0.20))',
-                    backdropFilter: 'blur(20px)',
-                    border: '1px solid rgba(255,255,255,0.25)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                    gap: '4px',
-                    transition: 'transform 4s ease-in-out'
-                  }}
-                >
-                  <span style={{
-                    color: 'rgba(255,255,255,0.90)',
-                    fontSize: '15px',
-                    fontWeight: '300',
-                    letterSpacing: '0.04em',
-                    fontFamily: "'Georgia', serif"
-                  }}>
-                    {running ? currentPhase?.label : 'Ready'}
-                  </span>
-
-                  {running && (
-                    <span style={{
-                      color: 'rgba(255,255,255,0.45)',
-                      fontSize: '24px',
-                      fontWeight: '200'
-                    }}>
-                      {secondsLeft}
-                    </span>
-                  )}
-                </div>
+                <BreathingOrb
+                  phase={currentPhase?.label || ''}
+                  running={running}
+                  secondsLeft={secondsLeft}
+                  totalSeconds={selected?.phases[phaseIndex]?.duration || 1}
+                />
               </div>
 
               {/* Phase indicators */}

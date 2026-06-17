@@ -32,7 +32,7 @@ function App() {
   }
 
   if (screen === 'chat') {
-    return <ChatScreen firstMessage={firstMessage} />
+    return <ChatScreen firstMessage={firstMessage} onBack={() => setScreen('home')} />
   }
 
   if (screen === 'journal') {

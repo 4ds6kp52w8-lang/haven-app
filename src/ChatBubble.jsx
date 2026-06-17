@@ -2,18 +2,16 @@ import { useEffect, useRef } from 'react'
 
 function ChatBubble({ message, sender }) {
   const isUser = sender === 'user'
-  const ref = useRef(null)
   const glowRef = useRef(null)
 
-  // Gentle ambient glow animation for Haven's messages
   useEffect(() => {
     if (isUser || !glowRef.current) return
     let t = 0
     let animFrame
 
     function animate() {
-      t += 0.008
-      const opacity = 0.06 + 0.04 * Math.sin(t)
+      t += 0.006
+      const opacity = 0.04 + 0.03 * Math.sin(t)
       if (glowRef.current) {
         glowRef.current.style.opacity = opacity
       }
@@ -25,40 +23,35 @@ function ChatBubble({ message, sender }) {
   }, [])
 
   return (
-    <div
-      ref={ref}
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: isUser ? 'flex-end' : 'flex-start',
-        marginBottom: '28px',
-        padding: isUser ? '0 28px 0 80px' : '0 80px 0 28px',
-        animation: 'fadeSlideIn 0.6s ease forwards',
-        opacity: 0,
-        width: '100%',
-      }}
-    >
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: isUser ? 'flex-end' : 'flex-start',
+      marginBottom: '20px',
+      padding: isUser ? '0 28px 0 80px' : '0 80px 0 28px',
+      animation: 'fadeSlideIn 0.5s ease forwards',
+      opacity: 0,
+      width: '100%'
+    }}>
       <style>{`
         @keyframes fadeSlideIn {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(8px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes havenBloom {
+          0% { opacity: 0; transform: translateY(6px) scale(0.98); filter: blur(2px); }
+          100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0px); }
         }
       `}</style>
 
       {/* Sender label */}
       <div style={{
-        fontSize: '11px',
+        fontSize: '10px',
         fontWeight: '500',
         letterSpacing: '0.12em',
         textTransform: 'uppercase',
-        color: 'rgba(255,255,255,0.45)',
-        marginBottom: '8px',
+        color: 'rgba(255,255,255,0.30)',
+        marginBottom: '6px',
         fontFamily: "'Manrope', sans-serif",
         paddingLeft: isUser ? '0' : '4px',
         paddingRight: isUser ? '4px' : '0'
@@ -66,49 +59,55 @@ function ChatBubble({ message, sender }) {
         {isUser ? 'You' : 'Haven'}
       </div>
 
-      {/* Message card */}
       <div style={{
         position: 'relative',
-        width: 'inline-block',
-        maxWidth: '70%'
+        display: 'inline-block',
+        maxWidth: '65%',
+        animation: isUser ? 'fadeSlideIn 0.4s ease forwards' : 'havenBloom 0.9s ease forwards'
       }}>
 
-        {/* Ambient glow behind Haven messages */}
+        {/* Haven ambient glow */}
         {!isUser && (
           <div
             ref={glowRef}
             style={{
               position: 'absolute',
-              inset: '-12px',
+              inset: '-10px',
               borderRadius: '28px',
-              background: 'radial-gradient(ellipse, rgba(100,160,255,0.3) 0%, transparent 70%)',
-              filter: 'blur(16px)',
+              background: 'radial-gradient(ellipse, rgba(140,100,255,0.4) 0%, transparent 70%)',
+              filter: 'blur(12px)',
               pointerEvents: 'none',
-              opacity: 0.06
+              opacity: 0.04
             }}
           />
         )}
 
-        {/* Glass card */}
+        {/* Bubble */}
         <div style={{
           position: 'relative',
-          padding: '14px 20px',
-          borderRadius: isUser ? '24px 24px 6px 24px' : '24px 24px 24px 6px',
+          padding: '13px 18px',
+          borderRadius: isUser ? '20px 20px 5px 20px' : '20px 20px 20px 5px',
+
+          // User — pearl glass with blue tint
           background: isUser
-          ? 'rgba(240,238,255,0.82)'
-          : 'rgba(220,215,255,0.18)',
-        backdropFilter: 'blur(30px)',
-        WebkitBackdropFilter: 'blur(30px)',
-        border: isUser
-          ? '1px solid rgba(200,195,255,0.40)'
-          : '1px solid rgba(180,170,255,0.25)',
-        boxShadow: isUser
-          ? '0 8px 32px rgba(150,140,255,0.10), 0 2px 8px rgba(0,0,0,0.04)'
-          : '0 8px 32px rgba(120,100,255,0.08), inset 0 1px 0 rgba(255,255,255,0.12)',
-        color: isUser ? '#2a2445' : 'rgba(255,255,255,0.92)',
-          fontSize: '16px',
-          fontWeight: isUser ? '400' : '300',
-          lineHeight: '1.75',
+            ? 'rgba(210, 220, 255, 0.16)'
+            : 'rgba(255,255,255,0.07)',
+
+          backdropFilter: 'blur(24px)',
+          WebkitBackdropFilter: 'blur(24px)',
+
+          border: isUser
+            ? '1px solid rgba(200, 215, 255, 0.28)'
+            : '1px solid rgba(255,255,255,0.12)',
+
+          boxShadow: isUser
+            ? '0 4px 24px rgba(100,120,255,0.12), inset 0 1px 0 rgba(255,255,255,0.18)'
+            : '0 4px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.08)',
+
+          color: 'rgba(255,255,255,0.90)',
+          fontSize: '15px',
+          fontWeight: '300',
+          lineHeight: '1.70',
           fontFamily: "'Manrope', sans-serif",
           letterSpacing: '0.015em'
         }}>
