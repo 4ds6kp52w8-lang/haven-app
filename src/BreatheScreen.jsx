@@ -391,7 +391,7 @@ function CompletionScreen({ cycles, onRestart, onHome }) {
       <div style={{ color: 'rgba(255,255,255,0.80)', fontSize: '28px', fontWeight: '300', fontFamily: "'Georgia', serif", lineHeight: 1.4 }}>
         Well done.
       </div>
-      <div style={{ color: 'rgba(255,255,255,0.45)', fontSize: '14px', fontWeight: '300', lineHeight: 1.6 }}>
+      <div style={{ color: 'rgba(255,255,255,0.80)', fontSize: '14px', fontWeight: '300', lineHeight: 1.6 }}>
         {cycles} {cycles === 1 ? 'cycle' : 'cycles'} completed.
       </div>
       {!feeling ? (
@@ -493,6 +493,16 @@ function BreatheScreen({ onBack }) {
     setBgBrightness(isInhale ? 1.05 : isExhale ? 0.97 : 1.01)
   }, [phaseIndex, running])
 
+  useEffect(() => {
+  if (!running) return
+  const handleBeforeUnload = (e) => {
+    e.preventDefault()
+    e.returnValue = ''
+  }
+  window.addEventListener('beforeunload', handleBeforeUnload)
+  return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [running])
+
   function selectTechnique(technique) {
     setSelected(technique)
     setTargetMinutes(3)
@@ -537,11 +547,15 @@ function BreatheScreen({ onBack }) {
   const currentPhase = selected?.phases[phaseIndex]
 
   function handleBack() {
-    if (view === 'home') { onBack(); return }
-    if (view === 'prep') { setView('home'); return }
-    setRunning(false)
-    stopBreathAudio()
-    setView('home')
+  if (view === 'home') { onBack(); return }
+  if (view === 'prep') { setView('home'); return }
+  if (running) {
+    const confirmed = window.confirm('Leave your breathing session? Your progress will be lost.')
+    if (!confirmed) return
+  }
+  setRunning(false)
+  stopBreathAudio()
+  setView('home')
   }
 
   function backLabel() {
@@ -687,7 +701,7 @@ function BreatheScreen({ onBack }) {
                     padding: '10px 20px', borderRadius: '24px',
                     border: `1px solid ${targetMinutes === min ? 'rgba(140,200,255,0.50)' : 'rgba(255,255,255,0.20)'}`,
                     background: targetMinutes === min ? 'rgba(140,200,255,0.18)' : 'rgba(255,255,255,0.06)',
-                    color: targetMinutes === min ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.45)',
+                    color: targetMinutes === min ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.80)',
                     fontSize: '14px', cursor: 'pointer', transition: 'all 0.2s ease', letterSpacing: '0.02em',
                     boxShadow: targetMinutes === min ? '0 0 16px rgba(140,200,255,0.15)' : 'none'
                   }}>
@@ -695,7 +709,7 @@ function BreatheScreen({ onBack }) {
                   </button>
                 ))}
               </div>
-              <div style={{ color: 'rgba(180,210,255,0.45)', fontSize: '13px', fontWeight: '300', fontFamily: "'Georgia', serif", fontStyle: 'italic', marginBottom: '36px', lineHeight: 1.7, maxWidth: '280px' }}>
+              <div style={{ color: 'rgba(180,210,255,0.80)', fontSize: '13px', fontWeight: '300', fontFamily: "'Georgia', serif", fontStyle: 'italic', marginBottom: '36px', lineHeight: 1.7, maxWidth: '280px' }}>
                 {intention}
               </div>
               <button onClick={beginSession} style={{
@@ -755,7 +769,7 @@ function BreatheScreen({ onBack }) {
                   )}
 
                   {/* The orb — now receives phaseIndex for the ripple */}
-                  <div style={{ position: 'relative', width: '260px', height: '260px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '28px' }}>
+                  <div style={{ position: 'relative', width: '320px', height: '320px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '28px' }}>
                     <BreathingOrb
                       phase={currentPhase?.label || ''}
                       running={running}
@@ -798,7 +812,7 @@ function BreatheScreen({ onBack }) {
                       </div>
                     )}
                     {running && (
-                      <div key={affirmation} style={{ color: 'rgba(200,230,255,0.82)', fontSize: '16px', fontWeight: '300', fontFamily: "'Georgia', serif", fontStyle: 'italic', animation: 'fadeIn 0.8s ease forwards', letterSpacing: '0.02em', textShadow: '0 0 20px rgba(140,200,255,0.4)' }}>
+                      <div key={affirmation} style={{ color: 'rgba(255,255,255,0.82)', fontSize: '17px', fontWeight: '300', fontFamily: "'Georgia', serif", fontStyle: 'italic', animation: 'fadeIn 0.8s ease forwards', letterSpacing: '0.03em', textShadow: '0 0 30px rgba(180,220,255,0.6), 0 0 60px rgba(140,200,255,0.3)' }}>
                         {affirmation}
                       </div>
                     )}

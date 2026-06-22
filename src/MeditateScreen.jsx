@@ -552,6 +552,50 @@ function MeditateScreen({ onBack }) {
     }
   }, [playing])
 
+  // Speak current step text when it changes
+useEffect(() => {
+  if (!playing || !selectedSession) return
+  const text = selectedSession.steps[stepIndex]?.text
+  if (!text) return
+
+  window.speechSynthesis.cancel()
+
+  const utterance = new SpeechSynthesisUtterance(text)
+utterance.rate = 0.78
+utterance.pitch = 0.88
+utterance.volume = 0.85
+
+// Wait for voices to load if needed (Chrome loads them async)
+const setVoiceAndSpeak = () => {
+  const voices = window.speechSynthesis.getVoices()
+  const preferred = voices.find(v => v.name === 'Google UK English Female')
+    || voices.find(v => v.name === 'Microsoft Zira - English (United States)')
+    || voices.find(v => v.name.includes('Samantha'))
+    || voices.find(v => v.name.includes('Karen'))
+    || voices.find(v => v.name === 'Google US English')
+    || voices.find(v => v.lang.startsWith('en-GB'))
+    || voices.find(v => v.lang.startsWith('en'))
+    || voices[0]
+  if (preferred) utterance.voice = preferred
+  window.speechSynthesis.speak(utterance)
+}
+
+if (window.speechSynthesis.getVoices().length === 0) {
+  window.speechSynthesis.onvoiceschanged = setVoiceAndSpeak
+} else {
+  setVoiceAndSpeak()
+}
+
+  window.speechSynthesis.speak(utterance)
+
+  return () => window.speechSynthesis.cancel()
+}, [stepIndex, playing])
+
+// Also cancel speech when leaving the session
+useEffect(() => {
+  if (view !== 'session') window.speechSynthesis.cancel()
+}, [view])
+
   function startSession(session) {
     setSelectedSession(session)
     setStepIndex(0)
@@ -642,18 +686,18 @@ function MeditateScreen({ onBack }) {
         </div>
 
         {/* Content */}
-        <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', scrollbarWidth: 'none', padding: '36px', boxSizing: 'border-box' }}>
+       <div style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', scrollbarWidth: 'none', padding: '36px', boxSizing: 'border-box' }}>
 
           {/* ── HOME VIEW ── */}
           {view === 'home' && (
-            <div style={{ maxWidth: '680px', margin: '0 auto' }}>
+            <div style={{ width: '100%' }}>
               <h2 style={{ color: 'rgba(255,255,255,0.85)', fontSize: '22px', fontWeight: '300', fontFamily: "'Georgia', serif", margin: '0 0 8px 0' }}>
                 Guided Sessions
               </h2>
               <p style={{ color: 'rgba(255,255,255,0.40)', fontSize: '14px', fontWeight: '300', margin: '0 0 36px 0', lineHeight: '1.6' }}>
                 Choose a session based on how you're feeling right now.
               </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
                 {SESSIONS.map((session, i) => (
                   <div
                     key={session.id}
