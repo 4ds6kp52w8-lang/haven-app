@@ -8,8 +8,10 @@ const PLAYLISTS = [
     description: 'Calm piano pieces for focus and reflection.',
     mood: 'Calm',
     color: 'rgba(100, 160, 220, 0.25)',
-    url: 'https://open.spotify.com/playlist/37i9dQZF1DX4sWSpwq3LiO',
-    tracks: '171 songs'
+    tracks: '171 songs',
+    spotify: 'https://open.spotify.com/playlist/37i9dQZF1DX4sWSpwq3LiO',
+    youtube: 'https://www.youtube.com/results?search_query=peaceful+piano+music',
+    amazon: 'https://music.amazon.com/search/peaceful%20piano'
   },
   {
     id: 2,
@@ -17,8 +19,10 @@ const PLAYLISTS = [
     description: 'Gentle sounds to help you drift off peacefully.',
     mood: 'Sleep',
     color: 'rgba(100, 80, 180, 0.25)',
-    url: 'https://open.spotify.com/playlist/37i9dQZF1DWZd79rJ6a7lp',
-    tracks: '139 songs'
+    tracks: '139 songs',
+    spotify: 'https://open.spotify.com/playlist/37i9dQZF1DWZd79rJ6a7lp',
+    youtube: 'https://www.youtube.com/results?search_query=sleep+music+relaxing',
+    amazon: 'https://music.amazon.com/search/sleep%20music'
   },
   {
     id: 3,
@@ -26,8 +30,10 @@ const PLAYLISTS = [
     description: 'Soft ambient textures for quiet moments.',
     mood: 'Relax',
     color: 'rgba(140, 100, 220, 0.25)',
-    url: 'https://open.spotify.com/playlist/37i9dQZF1DWXe9gFZP0gtP',
-    tracks: '85 songs'
+    tracks: '85 songs',
+    spotify: 'https://open.spotify.com/playlist/37i9dQZF1DWXe9gFZP0gtP',
+    youtube: 'https://www.youtube.com/results?search_query=ambient+relaxation+music',
+    amazon: 'https://music.amazon.com/search/ambient%20relaxation'
   },
   {
     id: 4,
@@ -35,8 +41,10 @@ const PLAYLISTS = [
     description: 'Uplifting songs to gently brighten your mood.',
     mood: 'Joy',
     color: 'rgba(220, 180, 80, 0.25)',
-    url: 'https://open.spotify.com/playlist/37i9dQZF1DX9XIFQuFvzM4',
-    tracks: '100 songs'
+    tracks: '100 songs',
+    spotify: 'https://open.spotify.com/playlist/37i9dQZF1DX9XIFQuFvzM4',
+    youtube: 'https://www.youtube.com/results?search_query=happy+feel+good+music',
+    amazon: 'https://music.amazon.com/search/happy%20uplifting%20music'
   },
   {
     id: 5,
@@ -44,8 +52,10 @@ const PLAYLISTS = [
     description: 'For when you need to sit with your feelings.',
     mood: 'Sad',
     color: 'rgba(100, 140, 200, 0.25)',
-    url: 'https://open.spotify.com/playlist/37i9dQZF1DX7qK8ma5wgG1',
-    tracks: '60 songs'
+    tracks: '60 songs',
+    spotify: 'https://open.spotify.com/playlist/37i9dQZF1DX7qK8ma5wgG1',
+    youtube: 'https://www.youtube.com/results?search_query=melancholy+sad+music',
+    amazon: 'https://music.amazon.com/search/melancholy%20sad%20music'
   },
   {
     id: 6,
@@ -53,8 +63,10 @@ const PLAYLISTS = [
     description: 'Rain, ocean waves, and forest ambience.',
     mood: 'Grounding',
     color: 'rgba(100, 180, 140, 0.25)',
-    url: 'https://open.spotify.com/playlist/37i9dQZF1DX4PP3DA4J0N8',
-    tracks: '50 songs'
+    tracks: '50 songs',
+    spotify: 'https://open.spotify.com/playlist/37i9dQZF1DX4PP3DA4J0N8',
+    youtube: 'https://www.youtube.com/results?search_query=nature+sounds+rain+ocean',
+    amazon: 'https://music.amazon.com/search/nature%20sounds'
   },
   {
     id: 7,
@@ -62,8 +74,10 @@ const PLAYLISTS = [
     description: 'Music engineered for deep concentration.',
     mood: 'Focus',
     color: 'rgba(180, 120, 200, 0.25)',
-    url: 'https://open.spotify.com/playlist/37i9dQZF1DWZeKCadgRdKQ',
-    tracks: '200 songs'
+    tracks: '200 songs',
+    spotify: 'https://open.spotify.com/playlist/37i9dQZF1DWZeKCadgRdKQ',
+    youtube: 'https://www.youtube.com/results?search_query=deep+focus+study+music',
+    amazon: 'https://music.amazon.com/search/deep%20focus%20music'
   },
   {
     id: 8,
@@ -71,8 +85,10 @@ const PLAYLISTS = [
     description: 'Gentle music for difficult days and tender moments.',
     mood: 'Healing',
     color: 'rgba(200, 140, 160, 0.25)',
-    url: 'https://open.spotify.com/playlist/37i9dQZF1DX3Ogo9pFvBkY',
-    tracks: '75 songs'
+    tracks: '75 songs',
+    spotify: 'https://open.spotify.com/playlist/37i9dQZF1DX3Ogo9pFvBkY',
+    youtube: 'https://www.youtube.com/results?search_query=healing+gentle+music',
+    amazon: 'https://music.amazon.com/search/healing%20music'
   }
 ]
 
@@ -80,6 +96,7 @@ function MusicScreen({ onBack }) {
   const [visible, setVisible] = useState(false)
   const [connected, setConnected] = useState(false)
   const [showConnectInfo, setShowConnectInfo] = useState(false)
+  const [platform, setPlatform] = useState('spotify')
   const [aiInput, setAiInput] = useState('')
   const [aiMessages, setAiMessages] = useState([])
   const [aiLoading, setAiLoading] = useState(false)
@@ -345,24 +362,37 @@ function MusicScreen({ onBack }) {
             margin: '0'
           }}>
 
-            <h2 style={{
-              color: 'rgba(255,255,255,0.85)',
-              fontSize: '22px',
-              fontWeight: '300',
-              fontFamily: "'Georgia', serif",
-              margin: '0 0 8px 0'
-            }}>
-              Curated Playlists
-            </h2>
-            <p style={{
-              color: 'rgba(255,255,255,0.40)',
-              fontSize: '14px',
-              fontWeight: '300',
-              margin: '0 0 36px 0',
-              lineHeight: '1.6'
-            }}>
-              Hand-picked playlists for every emotional state. Opens in Spotify.
-            </p>
+            <h2 style={{ color: 'rgba(255,255,255,0.85)', fontSize: '22px', fontWeight: '300', fontFamily: "'Georgia', serif", margin: '0 0 8px 0' }}>
+  Curated Playlists
+</h2>
+<p style={{ color: 'rgba(255,255,255,0.40)', fontSize: '14px', fontWeight: '300', margin: '0 0 20px 0', lineHeight: '1.6' }}>
+  Hand-picked playlists for every emotional state.
+</p>
+
+{/* Platform selector */}
+<div style={{ display: 'flex', gap: '8px', marginBottom: '28px' }}>
+  {[
+    { id: 'spotify',  label: 'Spotify',       color: 'rgba(30,215,96,0.80)' },
+    { id: 'youtube',  label: 'YouTube',        color: 'rgba(255,80,80,0.80)' },
+    { id: 'amazon',   label: 'Amazon Music',   color: 'rgba(0,168,232,0.80)' },
+  ].map(p => (
+    <button
+      key={p.id}
+      onClick={() => setPlatform(p.id)}
+      style={{
+        padding: '7px 16px', borderRadius: '20px',
+        border: `1px solid ${platform === p.id ? p.color : 'rgba(255,255,255,0.15)'}`,
+        background: platform === p.id ? `${p.color.replace('0.80', '0.12')}` : 'rgba(255,255,255,0.05)',
+        color: platform === p.id ? p.color : 'rgba(255,255,255,0.40)',
+        fontSize: '12px', cursor: 'pointer', transition: 'all 0.2s ease',
+        letterSpacing: '0.02em',
+        boxShadow: platform === p.id ? `0 0 12px ${p.color.replace('0.80', '0.15')}` : 'none'
+      }}
+    >
+      {p.label}
+    </button>
+  ))}
+</div>
 
             {/* Playlist grid */}
             <div style={{
@@ -373,7 +403,7 @@ function MusicScreen({ onBack }) {
               {PLAYLISTS.map((playlist, i) => (
                 <div
                   key={playlist.id}
-                  onClick={() => window.open(playlist.url, '_blank')}
+                  onClick={() => window.open(playlist[platform], '_blank')}
                   style={{
                     padding: '22px 24px',
                     borderRadius: '20px',
@@ -432,29 +462,16 @@ function MusicScreen({ onBack }) {
                     {playlist.name}
                   </div>
 
-                  <div style={{
-                    color: 'rgba(255,255,255,0.40)',
-                    fontSize: '12px',
-                    fontWeight: '300',
-                    lineHeight: '1.5'
-                  }}>
-                    {playlist.description}
-                  </div>
-
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    marginTop: '4px',
-                    color: 'rgba(30,215,96,0.70)',
-                    fontSize: '11px',
-                    letterSpacing: '0.04em'
-                  }}>
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
-                    </svg>
-                    Open in Spotify
-                  </div>
+                  <span style={{
+  display: 'inline-flex', alignItems: 'center', gap: '5px',
+  marginTop: '4px', fontSize: '11px', letterSpacing: '0.04em', fontWeight: '500',
+  padding: '3px 10px', borderRadius: '12px', alignSelf: 'flex-start',
+  color: platform === 'spotify' ? 'rgba(30,215,96,1)' : platform === 'youtube' ? 'rgba(255,70,70,1)' : 'rgba(0,168,232,1)',
+  background: 'rgba(235,238,245,0.75)',
+  border: platform === 'spotify' ? 'rgba(30,215,96,1)' : platform === 'youtube' ? 'rgba(255,70,70,1)' : 'rgba(0,168,232,1)',
+}}>
+  ↗ Open in {platform === 'spotify' ? 'Spotify' : platform === 'youtube' ? 'YouTube' : 'Amazon Music'}
+</span>
                 </div>
               ))}
             </div>

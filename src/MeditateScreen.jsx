@@ -152,163 +152,55 @@ const AMBIENT_SOUNDS = [
 ]
 
 // ── Ambient audio engine ────────────────────────────────────────────────
-let ambCtx = null
-let ambMasterGain = null
-let ambIsPlaying = false
-let ambCurrentSource = null  // holds the active noise node so we can retrigger
+const SOUND_FILES = {
+  rain:      '/sounds/rain.mp3',
+  ocean:     '/sounds/ocean.mp3',
+  forest:    '/sounds/forest.mp3',
+  fireplace: '/sounds/fireplace.mp3',
+  white:     '/sounds/whitenoise.mp3',
+}
+
+let ambAudio = null
 
 function stopAmbient() {
-  if (!ambMasterGain || !ambCtx) return
-  ambIsPlaying = false
-  const now = ambCtx.currentTime
-  ambMasterGain.gain.cancelScheduledValues(now)
-  ambMasterGain.gain.setValueAtTime(ambMasterGain.gain.value, now)
-  ambMasterGain.gain.linearRampToValueAtTime(0, now + 1.5)
+  if (!ambAudio) return
+  const audio = ambAudio
+  // Fade out over 1.5s then pause
+  let vol = audio.volume
+  const step = vol / 30
+  const fade = setInterval(() => {
+    vol = Math.max(0, vol - step)
+    audio.volume = vol
+    if (vol <= 0) {
+      clearInterval(fade)
+      audio.pause()
+    }
+  }, 50)
 }
 
 function playAmbient(soundId) {
-  // Create context on first use (browsers require user gesture)
-  if (!ambCtx) {
-    ambCtx = new (window.AudioContext || window.webkitAudioContext)()
-    ambMasterGain = ambCtx.createGain()
-    ambMasterGain.gain.value = 0
-    ambMasterGain.connect(ambCtx.destination)
-  }
-  if (ambCtx.state === 'suspended') ambCtx.resume()
-
-  // Disconnect any previous source
-  if (ambCurrentSource) {
-    try { ambCurrentSource.disconnect() } catch(e) {}
-    ambCurrentSource = null
+  // Stop existing audio
+  if (ambAudio) {
+    ambAudio.pause()
+    ambAudio.src = ''
+    ambAudio = null
   }
 
-  // Fade master down then swap sound and fade back up
-  const now = ambCtx.currentTime
-  ambMasterGain.gain.cancelScheduledValues(now)
-  ambMasterGain.gain.setValueAtTime(ambMasterGain.gain.value, now)
-  ambMasterGain.gain.linearRampToValueAtTime(0, now + 0.6)
+  const audio = new Audio(SOUND_FILES[soundId])
+  audio.loop = true
+  audio.volume = 0
+  ambAudio = audio
 
-  setTimeout(() => {
-    if (!ambCtx) return
-    buildAmbientLayer(soundId)
-    const t = ambCtx.currentTime
-    ambMasterGain.gain.cancelScheduledValues(t)
-    ambMasterGain.gain.setValueAtTime(0, t)
-    ambMasterGain.gain.linearRampToValueAtTime(0.35, t + 2.5)
-    ambIsPlaying = true
-  }, 650)
-}
+  audio.play().catch(() => {})
 
-function buildAmbientLayer(soundId) {
-  const sr = ambCtx.sampleRate
-
-  // Shared reverb
-  const conv = ambCtx.createConvolver()
-  const rt = sr * 4
-  const rb = ambCtx.createBuffer(2, rt, sr)
-  for (let ch = 0; ch < 2; ch++) {
-    const d = rb.getChannelData(ch)
-    for (let i = 0; i < rt; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / rt, 1.5)
-  }
-  conv.buffer = rb
-  const wet = ambCtx.createGain(); wet.gain.value = 0.55
-  const dry = ambCtx.createGain(); dry.gain.value = 0.45
-  ambMasterGain.connect(conv); conv.connect(wet); wet.connect(ambCtx.destination)
-  ambMasterGain.connect(dry); dry.connect(ambCtx.destination)
-
-  function makeNoise(bufSecs) {
-    const buf = ambCtx.createBuffer(2, sr * bufSecs, sr)
-    for (let ch = 0; ch < 2; ch++) {
-      const d = buf.getChannelData(ch)
-      for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1
-    }
-    const src = ambCtx.createBufferSource()
-    src.buffer = buf; src.loop = true
-    return src
-  }
-
-  function bpf(freq, Q) {
-    const f = ambCtx.createBiquadFilter()
-    f.type = 'bandpass'; f.frequency.value = freq; f.Q.value = Q
-    return f
-  }
-  function lpf(freq) {
-    const f = ambCtx.createBiquadFilter()
-    f.type = 'lowpass'; f.frequency.value = freq
-    return f
-  }
-
-  let src
-
-  if (soundId === 'rain') {
-    src = makeNoise(4)
-    const lo = lpf(2000)
-    const hi = bpf(4000, 0.4)
-    const g = ambCtx.createGain(); g.gain.value = 0.5
-    // periodic swell for heavy rain drops
-    src.connect(lo); lo.connect(g)
-    src.connect(hi); hi.connect(g)
-    g.connect(ambMasterGain)
-    src.start()
-    // subtle LFO for rain intensity variation
-    const lfo = ambCtx.createOscillator(); lfo.frequency.value = 0.08
-    const lfoG = ambCtx.createGain(); lfoG.gain.value = 0.08
-    lfo.connect(lfoG); lfoG.connect(g.gain)
-    lfo.start()
-  } else if (soundId === 'ocean') {
-    src = makeNoise(8)
-    const f1 = lpf(600)
-    const f2 = bpf(200, 1.2)
-    const g = ambCtx.createGain(); g.gain.value = 0.6
-    src.connect(f1); f1.connect(g)
-    src.connect(f2); f2.connect(g)
-    g.connect(ambMasterGain)
-    src.start()
-    // slow wave LFO ~0.1 Hz
-    const lfo = ambCtx.createOscillator(); lfo.frequency.value = 0.1
-    const lfoG = ambCtx.createGain(); lfoG.gain.value = 0.25
-    lfo.connect(lfoG); lfoG.connect(g.gain)
-    lfo.start()
-  } else if (soundId === 'forest') {
-    // Layered: wind low + high chirp texture
-    src = makeNoise(4)
-    const wind = lpf(400)
-    const windG = ambCtx.createGain(); windG.gain.value = 0.3
-    src.connect(wind); wind.connect(windG); windG.connect(ambMasterGain)
-    const src2 = makeNoise(4)
-    const chirp = bpf(3500, 8)
-    const chirpG = ambCtx.createGain(); chirpG.gain.value = 0.04
-    src2.connect(chirp); chirp.connect(chirpG); chirpG.connect(ambMasterGain)
-    src.start(); src2.start()
-    // gentle wind swell
-    const lfo = ambCtx.createOscillator(); lfo.frequency.value = 0.05
-    const lfoG = ambCtx.createGain(); lfoG.gain.value = 0.12
-    lfo.connect(lfoG); lfoG.connect(windG.gain)
-    lfo.start()
-  } else if (soundId === 'fireplace') {
-    src = makeNoise(4)
-    const crackle = bpf(1200, 0.6)
-    const rumble = lpf(180)
-    const g1 = ambCtx.createGain(); g1.gain.value = 0.15
-    const g2 = ambCtx.createGain(); g2.gain.value = 0.55
-    src.connect(crackle); crackle.connect(g1); g1.connect(ambMasterGain)
-    src.connect(rumble);  rumble.connect(g2);  g2.connect(ambMasterGain)
-    src.start()
-    // flicker LFO
-    const lfo = ambCtx.createOscillator(); lfo.frequency.value = 0.3
-    const lfoG = ambCtx.createGain(); lfoG.gain.value = 0.08
-    lfo.connect(lfoG); lfoG.connect(g2.gain)
-    lfo.start()
-  } else {
-    // white noise — flat spectrum
-    src = makeNoise(4)
-    const f = lpf(8000)
-    const g = ambCtx.createGain(); g.gain.value = 0.4
-    src.connect(f); f.connect(g); g.connect(ambMasterGain)
-    src.start()
-  }
-
-  ambCurrentSource = src
+  // Fade in over 2.5s
+  let vol = 0
+  const target = 0.5
+  const fade = setInterval(() => {
+    vol = Math.min(target, vol + 0.02)
+    audio.volume = vol
+    if (vol >= target) clearInterval(fade)
+  }, 100)
 }
 
 // ── Progressive text reveal ─────────────────────────────────────────────
@@ -561,32 +453,29 @@ useEffect(() => {
   window.speechSynthesis.cancel()
 
   const utterance = new SpeechSynthesisUtterance(text)
-utterance.rate = 0.78
-utterance.pitch = 0.88
-utterance.volume = 0.85
+  utterance.rate = 0.78
+  utterance.pitch = 0.88
+  utterance.volume = 0.85
 
-// Wait for voices to load if needed (Chrome loads them async)
-const setVoiceAndSpeak = () => {
-  const voices = window.speechSynthesis.getVoices()
-  const preferred = voices.find(v => v.name === 'Google UK English Female')
-    || voices.find(v => v.name === 'Microsoft Zira - English (United States)')
-    || voices.find(v => v.name.includes('Samantha'))
-    || voices.find(v => v.name.includes('Karen'))
-    || voices.find(v => v.name === 'Google US English')
-    || voices.find(v => v.lang.startsWith('en-GB'))
-    || voices.find(v => v.lang.startsWith('en'))
-    || voices[0]
-  if (preferred) utterance.voice = preferred
-  window.speechSynthesis.speak(utterance)
-}
+  const setVoiceAndSpeak = () => {
+    const voices = window.speechSynthesis.getVoices()
+    const preferred = voices.find(v => v.name === 'Google UK English Female')
+      || voices.find(v => v.name === 'Microsoft Zira - English (United States)')
+      || voices.find(v => v.name.includes('Samantha'))
+      || voices.find(v => v.name.includes('Karen'))
+      || voices.find(v => v.name === 'Google US English')
+      || voices.find(v => v.lang.startsWith('en-GB'))
+      || voices.find(v => v.lang.startsWith('en'))
+      || voices[0]
+    if (preferred) utterance.voice = preferred
+    window.speechSynthesis.speak(utterance)
+  }
 
-if (window.speechSynthesis.getVoices().length === 0) {
-  window.speechSynthesis.onvoiceschanged = setVoiceAndSpeak
-} else {
-  setVoiceAndSpeak()
-}
-
-  window.speechSynthesis.speak(utterance)
+  if (window.speechSynthesis.getVoices().length === 0) {
+    window.speechSynthesis.onvoiceschanged = setVoiceAndSpeak
+  } else {
+    setVoiceAndSpeak()
+  }
 
   return () => window.speechSynthesis.cancel()
 }, [stepIndex, playing])
