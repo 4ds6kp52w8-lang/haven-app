@@ -558,7 +558,7 @@ useEffect(() => {
 
         {/* Header */}
         <div style={{
-          padding: '22px 36px', borderBottom: '1px solid rgba(255,255,255,0.10)',
+          padding: '28px 36px', borderBottom: '1px solid rgba(255,255,255,0.10)',
           backdropFilter: 'blur(30px)', background: 'rgba(255,255,255,0.06)',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0
         }}>
@@ -598,7 +598,7 @@ useEffect(() => {
                     <div style={{ fontSize: '28px', flexShrink: 0, opacity: 0.8 }}>{session.emoji}</div>
                     <div style={{ flex: 1 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
-                        <span style={{ padding: '3px 10px', borderRadius: '12px', background: CATEGORY_COLORS[session.category], color: 'rgba(255,255,255,0.75)', fontSize: '10px', letterSpacing: '0.06em', fontWeight: '500' }}>
+                        <span style={{ padding: '3px 10px', borderRadius: '12px', background: CATEGORY_COLORS[session.category].replace('0.25', '0.55'), color: 'rgba(255,255,255,0.95)', fontSize: '10px', letterSpacing: '0.06em', fontWeight: '500', border: '1px solid rgba(255,255,255,0.20)' }}>
                           {session.category}
                         </span>
                         <span style={{ color: 'rgba(255,255,255,0.30)', fontSize: '11px' }}>{session.duration} min</span>

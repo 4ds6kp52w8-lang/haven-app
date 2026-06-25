@@ -597,16 +597,25 @@ function BreatheScreen({ onBack }) {
 
         {/* Header */}
         <div style={{
-          padding: '22px 36px', borderBottom: '1px solid rgba(255,255,255,0.10)',
+          padding: '28px 36px', borderBottom: '1px solid rgba(255,255,255,0.10)',
           backdropFilter: 'blur(30px)', background: 'rgba(255,255,255,0.06)',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0, position: 'relative'
         }}>
           <button onClick={handleBack} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.55)', fontSize: '13px', cursor: 'pointer', letterSpacing: '0.04em', padding: 0 }}>
             ← {backLabel()}
           </button>
-          <span style={{ color: 'rgba(255,255,255,0.75)', fontSize: '12px', letterSpacing: '0.22em', textTransform: 'uppercase', fontWeight: '400' }}>
-            Breathe
-          </span>
+          <span style={{
+  position: 'absolute',
+  left: '50%',
+  transform: 'translateX(-50%)',
+  color: 'rgba(255,255,255,0.75)',
+  fontSize: '12px',
+  letterSpacing: '0.22em',
+  textTransform: 'uppercase',
+  fontWeight: '400'
+}}>
+  Breathe
+</span>
           <div style={{ width: '80px' }} />
         </div>
 
@@ -641,7 +650,7 @@ function BreatheScreen({ onBack }) {
                     onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.border = '1px solid rgba(255,255,255,0.13)'; e.currentTarget.style.transform = 'translateY(0)' }}
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ padding: '5px 14px', borderRadius: '20px', background: CATEGORY_COLORS[technique.category], color: 'rgba(255,255,255,0.95)', fontSize: '10px', letterSpacing: '0.08em', fontWeight: '600', textTransform: 'uppercase', border: '1px solid rgba(255,255,255,0.20)' }}>
+                      <span style={{ padding: '5px 14px', borderRadius: '20px', background: CATEGORY_COLORS[technique.category].replace('0.25', '0.55'), color: 'rgba(255,255,255,0.95)', fontSize: '10px', letterSpacing: '0.08em', fontWeight: '500', textTransform: 'uppercase', border: '1px solid rgba(255,255,255,0.20)' }}>
                         {technique.category}
                       </span>
                       <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: '12px', letterSpacing: '0.04em', fontWeight: '300' }}>

@@ -113,7 +113,8 @@ function JournalScreen({ onBack }) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          flexShrink: 0
+          flexShrink: 0,
+          position: 'relative'
         }}>
           <button
             onClick={view === 'home' ? onBack : () => setView('home')}
@@ -134,14 +135,17 @@ function JournalScreen({ onBack }) {
           </button>
 
           <span style={{
-            color: 'rgba(255,255,255,0.75)',
-            fontSize: '12px',
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            fontWeight: '400'
-          }}>
-            Journal
-          </span>
+  position: 'absolute',
+  left: '50%',
+  transform: 'translateX(-50%)',
+  color: 'rgba(255,255,255,0.75)',
+  fontSize: '12px',
+  letterSpacing: '0.22em',
+  textTransform: 'uppercase',
+  fontWeight: '400'
+}}>
+  Journal
+</span>
 
           {view === 'home' && (
             <button
@@ -151,16 +155,17 @@ function JournalScreen({ onBack }) {
                 setView('write')
               }}
               style={{
-                background: 'rgba(255,255,255,0.12)',
-                border: '1px solid rgba(255,255,255,0.20)',
-                borderRadius: '20px',
-                color: 'rgba(255,255,255,0.80)',
-                fontSize: '12px',
-                letterSpacing: '0.04em',
-                padding: '6px 16px',
-                cursor: 'pointer',
-                backdropFilter: 'blur(12px)'
-              }}
+  background: 'rgba(255,255,255,0.12)',
+  border: '1px solid rgba(255,255,255,0.20)',
+  borderRadius: '20px',
+  color: 'rgba(255,255,255,0.80)',
+  fontSize: '12px',
+  letterSpacing: '0.04em',
+  padding: '6px 16px',
+  cursor: 'pointer',
+  backdropFilter: 'blur(12px)',
+  marginRight: '48px'
+}}
             >
               + New Entry
             </button>
@@ -171,21 +176,22 @@ function JournalScreen({ onBack }) {
               onClick={saveEntry}
               disabled={!currentText.trim()}
               style={{
-                background: currentText.trim()
-                  ? 'rgba(255,255,255,0.18)'
-                  : 'rgba(255,255,255,0.06)',
-                border: '1px solid rgba(255,255,255,0.20)',
-                borderRadius: '20px',
-                color: currentText.trim()
-                  ? 'rgba(255,255,255,0.90)'
-                  : 'rgba(255,255,255,0.30)',
-                fontSize: '12px',
-                letterSpacing: '0.04em',
-                padding: '6px 16px',
-                cursor: currentText.trim() ? 'pointer' : 'not-allowed',
-                backdropFilter: 'blur(12px)',
-                transition: 'all 0.3s ease'
-              }}
+  background: currentText.trim()
+    ? 'rgba(255,255,255,0.18)'
+    : 'rgba(255,255,255,0.06)',
+  border: '1px solid rgba(255,255,255,0.20)',
+  borderRadius: '20px',
+  color: currentText.trim()
+    ? 'rgba(255,255,255,0.90)'
+    : 'rgba(255,255,255,0.30)',
+  fontSize: '12px',
+  letterSpacing: '0.04em',
+  padding: '6px 16px',
+  cursor: currentText.trim() ? 'pointer' : 'not-allowed',
+  backdropFilter: 'blur(12px)',
+  transition: 'all 0.3s ease',
+  marginRight: '48px'
+}}
             >
               Save
             </button>

@@ -196,13 +196,14 @@ function MusicScreen({ onBack }) {
         {/* Header */}
         <div style={{
           padding: '22px 36px',
-          borderBottom: '1px solid rgba(255,255,255,0.10)',
-          backdropFilter: 'blur(30px)',
-          background: 'rgba(255,255,255,0.06)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexShrink: 0
+borderBottom: '1px solid rgba(255,255,255,0.10)',
+backdropFilter: 'blur(30px)',
+background: 'rgba(255,255,255,0.06)',
+display: 'flex',
+alignItems: 'center',
+justifyContent: 'space-between',
+flexShrink: 0,
+position: 'relative'
         }}>
           <button
             onClick={onBack}
@@ -220,43 +221,37 @@ function MusicScreen({ onBack }) {
           </button>
 
           <span style={{
-            color: 'rgba(255,255,255,0.75)',
-            fontSize: '12px',
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            fontWeight: '400'
-          }}>
-            Music
-          </span>
+  position: 'absolute',
+  left: '50%',
+  transform: 'translateX(-50%)',
+  color: 'rgba(255,255,255,0.75)',
+  fontSize: '12px',
+  letterSpacing: '0.22em',
+  textTransform: 'uppercase',
+  fontWeight: '400'
+}}>
+  Music
+</span>
 
           <button
-            onClick={connected ? handleDisconnect : handleConnect}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '6px 14px',
-              borderRadius: '20px',
-              border: '1px solid rgba(255,255,255,0.20)',
-              background: connected
-                ? 'rgba(30, 215, 96, 0.15)'
-                : 'rgba(255,255,255,0.08)',
-              color: connected
-                ? 'rgba(30, 215, 96, 0.90)'
-                : 'rgba(255,255,255,0.55)',
-              fontSize: '11px',
-              cursor: 'pointer',
-              letterSpacing: '0.04em',
-              transition: 'all 0.3s ease',
-              backdropFilter: 'blur(12px)'
-            }}
-          >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
-            </svg>
-            {connected ? 'Connected' : 'Connect Spotify'}
-          </button>
-        </div>
+  onClick={connected ? handleDisconnect : handleConnect}
+  style={{
+    display: 'flex', alignItems: 'center', gap: '6px',
+    padding: '6px 14px', borderRadius: '20px',
+    border: '1px solid rgba(255,255,255,0.20)',
+    background: connected ? 'rgba(30,215,96,0.15)' : 'rgba(255,255,255,0.08)',
+    color: connected ? 'rgba(30,215,96,0.90)' : 'rgba(255,255,255,0.55)',
+    fontSize: '11px', cursor: 'pointer', letterSpacing: '0.04em',
+    transition: 'all 0.3s ease', backdropFilter: 'blur(12px)',
+    marginRight: '48px'
+  }}
+>
+  {connected
+    ? 'Connected'
+    : `Connect ${platform === 'spotify' ? 'Spotify' : platform === 'youtube' ? 'YouTube' : 'Amazon Music'}`
+  }
+</button>
+</div>
 
         {/* Connect info modal */}
         {showConnectInfo && (
@@ -436,16 +431,17 @@ function MusicScreen({ onBack }) {
                     alignItems: 'center'
                   }}>
                     <span style={{
-                      padding: '3px 10px',
-                      borderRadius: '12px',
-                      background: playlist.color,
-                      color: 'rgba(255,255,255,0.75)',
-                      fontSize: '10px',
-                      letterSpacing: '0.06em',
-                      fontWeight: '500'
-                    }}>
-                      {playlist.mood}
-                    </span>
+  padding: '3px 10px',
+  borderRadius: '12px',
+  background: playlist.color.replace('0.25', '0.55'),
+  color: 'rgba(255,255,255,0.95)',
+  fontSize: '10px',
+  letterSpacing: '0.06em',
+  fontWeight: '500',
+  border: '1px solid rgba(255,255,255,0.20)'
+}}>
+  {playlist.mood}
+</span>
                     <span style={{
                       color: 'rgba(255,255,255,0.25)',
                       fontSize: '11px'
@@ -465,10 +461,15 @@ function MusicScreen({ onBack }) {
                   <span style={{
   display: 'inline-flex', alignItems: 'center', gap: '5px',
   marginTop: '4px', fontSize: '11px', letterSpacing: '0.04em', fontWeight: '500',
-  padding: '3px 10px', borderRadius: '12px', alignSelf: 'flex-start',
-  color: platform === 'spotify' ? 'rgba(30,215,96,1)' : platform === 'youtube' ? 'rgba(255,70,70,1)' : 'rgba(0,168,232,1)',
-  background: 'rgba(235,238,245,0.75)',
-  border: platform === 'spotify' ? 'rgba(30,215,96,1)' : platform === 'youtube' ? 'rgba(255,70,70,1)' : 'rgba(0,168,232,1)',
+  padding: '4px 11px', borderRadius: '12px', alignSelf: 'flex-start',
+  color: 'rgba(255,255,255,0.95)',
+  background: platform === 'spotify' ? 'rgba(30,155,65,0.60)' : platform === 'youtube' ? 'rgba(185,40,40,0.60)' : 'rgba(0,140,210,0.75)',
+  border: '1px solid rgba(255,255,255,0.20)',
+  boxShadow: platform === 'spotify'
+  ? '0 2px 8px rgba(30,185,80,0.25), inset 0 1px 0 rgba(255,255,255,0.20)'
+  : platform === 'youtube'
+  ? '0 2px 8px rgba(220,50,50,0.25), inset 0 1px 0 rgba(255,255,255,0.20)'
+  : '0 2px 8px rgba(0,140,210,0.25), inset 0 1px 0 rgba(255,255,255,0.20)',
 }}>
   ↗ Open in {platform === 'spotify' ? 'Spotify' : platform === 'youtube' ? 'YouTube' : 'Amazon Music'}
 </span>

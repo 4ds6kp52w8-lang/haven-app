@@ -8,8 +8,8 @@ function WelcomeScreen({ onStart, onBack }) {
   const [textVisible, setTextVisible] = useState(false)
   const [inputValue, setInputValue] = useState('')
   useEffect(() => {
-    const textTimer = setTimeout(() => setTextVisible(true), 1200)
-    const inputTimer = setTimeout(() => setInputVisible(true), 2400)
+    const textTimer = setTimeout(() => setTextVisible(true), 300)
+    const inputTimer = setTimeout(() => setInputVisible(true), 700)
     return () => {
       clearTimeout(textTimer)
       clearTimeout(inputTimer)
@@ -82,7 +82,7 @@ function WelcomeScreen({ onStart, onBack }) {
             fontFamily: "'Segoe UI', sans-serif",
             padding: 0,
             opacity: textVisible ? 1 : 0,
-            transition: 'opacity 1.5s ease'
+            transition: 'opacity 0.85s ease'
           }}
         >
           ← Home
@@ -101,7 +101,7 @@ function WelcomeScreen({ onStart, onBack }) {
           fontFamily: "'Segoe UI', sans-serif",
           fontWeight: '400',
           opacity: textVisible ? 1 : 0,
-          transition: 'opacity 1.5s ease'
+          transition: 'opacity 0.85s ease'
         }}>
           Haven
         </div>
@@ -118,7 +118,7 @@ function WelcomeScreen({ onStart, onBack }) {
           textShadow: '0 2px 24px rgba(0,0,0,0.18)',
           opacity: textVisible ? 1 : 0,
           transform: textVisible ? 'translateY(0)' : 'translateY(12px)',
-          transition: 'opacity 1.8s ease, transform 1.8s ease',
+          transition: 'opacity 0.85s ease, transform 0.85s ease',
           maxWidth: '800px',
           padding: '0 24px',
           whiteSpace: 'nowrap'
@@ -135,7 +135,7 @@ function WelcomeScreen({ onStart, onBack }) {
           letterSpacing: '0.05em',
           fontFamily: "'Segoe UI', sans-serif",
           opacity: textVisible ? 1 : 0,
-          transition: 'opacity 2s ease',
+          transition: 'opacity 0.85s ease',
           transitionDelay: '0.3s'
         }}>
           I'm here to listen.
@@ -145,7 +145,7 @@ function WelcomeScreen({ onStart, onBack }) {
         <div style={{
           opacity: inputVisible ? 1 : 0,
           transform: inputVisible ? 'translateY(0)' : 'translateY(8px)',
-          transition: 'opacity 2s ease, transform 2s ease',
+          transition: 'opacity 0.85s ease, transform 0.85s ease',
           transitionDelay: '0.2s',
           width: '100%',
           maxWidth: '440px',
@@ -194,7 +194,7 @@ function WelcomeScreen({ onStart, onBack }) {
             letterSpacing: '0.03em',
             opacity: inputValue ? 0 : 1,
             transform: inputValue ? 'translateY(-4px)' : 'translateY(0)',
-            transition: 'opacity 0.4s ease, transform 0.4s ease',
+            transition: 'opacity 0.6s ease, transform 0.6s ease',
             pointerEvents: inputValue ? 'none' : 'auto'
           }}>
             press enter to begin

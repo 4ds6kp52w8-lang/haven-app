@@ -112,94 +112,64 @@ function ChatScreen({ firstMessage, onBack }) {
 
         {/* Header */}
         <div style={{
-          padding: '22px 36px',
+          padding: '22px 70px 22px 36px',
           borderBottom: '1px solid rgba(255,255,255,0.10)',
           backdropFilter: 'blur(30px)',
           WebkitBackdropFilter: 'blur(30px)',
           background: 'rgba(255,255,255,0.06)',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
+          position: 'relative'
         }}>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <button
-              onClick={onBack}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: 'rgba(255,255,255,0.45)',
-                fontSize: '13px',
-                cursor: 'pointer',
-                letterSpacing: '0.04em',
-                fontFamily: "'Manrope', sans-serif",
-                padding: 0,
-                transition: 'color 0.2s ease'
-              }}
-              onMouseEnter={e => e.target.style.color = 'rgba(255,255,255,0.85)'}
-              onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.45)'}
-            >
-              ← Home
-            </button>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{
-                color: 'rgba(255,255,255,0.90)',
-                fontSize: '13px',
-                fontWeight: '500',
-                letterSpacing: '0.22em',
-                textTransform: 'uppercase',
-                fontFamily: "'Manrope', sans-serif"
-              }}>
-                Haven
-              </span>
-              <div style={{
-                width: '6px',
-                height: '6px',
-                borderRadius: '50%',
-                background: loading ? '#fbbf24' : '#4DD8E8',
-                boxShadow: loading ? '0 0 8px #fbbf24' : '0 0 10px #4DD8E8',
-                transition: 'all 0.4s ease'
-              }} />
-            </div>
-          </div>
+          <button
+  onClick={onBack}
+  style={{
+    background: 'none', border: 'none',
+    color: 'rgba(255,255,255,0.45)', fontSize: '13px',
+    cursor: 'pointer', letterSpacing: '0.04em',
+    fontFamily: "'Manrope', sans-serif", padding: 0, transition: 'color 0.2s ease'
+  }}
+  onMouseEnter={e => e.target.style.color = 'rgba(255,255,255,0.85)'}
+  onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.45)'}
+>
+  ← Home
+</button>
 
-          <span style={{
-            color: 'rgba(255,255,255,0.25)',
-            fontSize: '12px',
-            letterSpacing: '0.06em',
-            fontWeight: '300',
-            fontFamily: "'Manrope', sans-serif"
-          }}>
-            a calm space
-          </span>
+<div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', display: 'flex', alignItems: 'center', gap: '8px' }}>
+  <span style={{
+    color: 'rgba(255,255,255,0.90)', fontSize: '13px', fontWeight: '500',
+    letterSpacing: '0.22em', textTransform: 'uppercase', fontFamily: "'Manrope', sans-serif"
+  }}>
+    Haven
+  </span>
+  <div style={{
+    width: '6px', height: '6px', borderRadius: '50%',
+    background: loading ? '#fbbf24' : '#4DD8E8',
+    boxShadow: loading ? '0 0 8px #fbbf24' : '0 0 10px #4DD8E8',
+    transition: 'all 0.4s ease'
+  }} />
+</div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            {['silent', 'ambient', 'piano'].map(mode => (
-              <button
-                key={mode}
-                onClick={() => handleSoundMode(mode)}
-                style={{
-                  background: soundMode === mode
-                    ? 'rgba(255,255,255,0.18)'
-                    : 'transparent',
-                  border: '1px solid rgba(255,255,255,0.15)',
-                  borderRadius: '20px',
-                  color: soundMode === mode
-                    ? 'rgba(255,255,255,0.90)'
-                    : 'rgba(255,255,255,0.35)',
-                  fontSize: '11px',
-                  fontFamily: "'Manrope', sans-serif",
-                  letterSpacing: '0.06em',
-                  padding: '4px 12px',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  textTransform: 'capitalize'
-                }}
-              >
-                {mode}
-              </button>
-            ))}
-          </div>
+<div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+  {['silent', 'ambient', 'piano'].map(mode => (
+    <button
+      key={mode}
+      onClick={() => handleSoundMode(mode)}
+      style={{
+        background: soundMode === mode ? 'rgba(255,255,255,0.18)' : 'transparent',
+        border: '1px solid rgba(255,255,255,0.15)', borderRadius: '20px',
+        color: soundMode === mode ? 'rgba(255,255,255,0.90)' : 'rgba(255,255,255,0.35)',
+        fontSize: '11px', fontFamily: "'Manrope', sans-serif",
+        letterSpacing: '0.06em', padding: '4px 12px',
+        cursor: 'pointer', transition: 'all 0.3s ease', textTransform: 'capitalize'
+      }}
+    >
+      {mode}
+    </button>
+  ))}
+</div>
         </div>
 
         {/* Messages */}

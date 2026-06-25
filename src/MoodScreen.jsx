@@ -135,7 +135,8 @@ function MoodScreen({ onBack }) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          flexShrink: 0
+          flexShrink: 0,
+          position: 'relative'
         }}>
           <button
             onClick={view === 'timeline' ? onBack : () => setView('timeline')}
@@ -153,26 +154,30 @@ function MoodScreen({ onBack }) {
           </button>
 
           <span style={{
-            color: 'rgba(255,255,255,0.75)',
-            fontSize: '12px',
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            fontWeight: '400'
-          }}>
-            Mood
-          </span>
+  position: 'absolute',
+  left: '50%',
+  transform: 'translateX(-50%)',
+  color: 'rgba(255,255,255,0.75)',
+  fontSize: '12px',
+  letterSpacing: '0.22em',
+  textTransform: 'uppercase',
+  fontWeight: '400'
+}}>
+  Mood
+</span>
 
           {view === 'timeline' && (
             <button
               onClick={() => setView('log')}
               style={{
-                background: 'rgba(255,255,255,0.12)',
-                border: '1px solid rgba(255,255,255,0.20)',
-                borderRadius: '20px',
-                color: 'rgba(255,255,255,0.80)',
-                fontSize: '12px',
-                letterSpacing: '0.04em',
-                padding: '6px 16px',
+  background: 'rgba(255,255,255,0.12)',
+  border: '1px solid rgba(255,255,255,0.20)',
+  borderRadius: '20px',
+  color: 'rgba(255,255,255,0.80)',
+  fontSize: '12px',
+  letterSpacing: '0.04em',
+  padding: '6px 16px',
+  marginRight: '48px',
                 cursor: 'pointer',
                 backdropFilter: 'blur(12px)'
               }}
