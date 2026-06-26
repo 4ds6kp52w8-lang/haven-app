@@ -112,7 +112,7 @@ function ChatScreen({ firstMessage, onBack }) {
 
         {/* Header */}
         <div style={{
-          padding: '22px 70px 22px 36px',
+          padding: '28px 70px 22px 36px',
           borderBottom: '1px solid rgba(255,255,255,0.10)',
           backdropFilter: 'blur(30px)',
           WebkitBackdropFilter: 'blur(30px)',
