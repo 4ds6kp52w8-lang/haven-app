@@ -443,21 +443,18 @@ function MoodScreen({ onBack }) {
                                         {formatTime(entry.date)}
                                       </span>
                                       <button
-                                        onClick={() => deleteEntry(entry.id)}
-                                        style={{
-                                          background: 'none',
-                                          border: 'none',
-                                          color: 'rgba(255,100,100,0.45)',
-                                          fontSize: '11px',
-                                          cursor: 'pointer',
-                                          padding: 0,
-                                          transition: 'color 0.2s ease'
-                                        }}
-                                        onMouseEnter={e => e.target.style.color = 'rgba(255,100,100,0.90)'}
-                                        onMouseLeave={e => e.target.style.color = 'rgba(255,100,100,0.45)'}
-                                      >
-                                        delete
-                                      </button>
+  onClick={() => deleteEntry(entry.id)}
+  style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '50%', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.2s ease', flexShrink: 0 }}
+  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,80,80,0.20)'; e.currentTarget.style.border = '1px solid rgba(255,80,80,0.40)' }}
+  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.border = '1px solid rgba(255,255,255,0.15)' }}
+>
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="3 6 5 6 21 6"/>
+    <path d="M19 6l-1 14H6L5 6"/>
+    <path d="M10 11v6M14 11v6"/>
+    <path d="M9 6V4h6v2"/>
+  </svg>
+</button>
                                     </div>
                                   </div>
 

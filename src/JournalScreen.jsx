@@ -236,9 +236,17 @@ input::placeholder { color: rgba(255,255,255,0.58); font-family: 'Georgia', seri
               </button>
             )}
             {view === 'entry' && (
-              <button onClick={() => deleteEntry(selectedEntry.id)} style={{ background: 'none', border: 'none', color: 'rgba(255,100,100,0.60)', fontSize: '12px', cursor: 'pointer', letterSpacing: '0.04em' }}>
-                Delete
-              </button>
+              <button onClick={() => deleteEntry(selectedEntry.id)} style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.2s ease' }}
+  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,80,80,0.20)'; e.currentTarget.style.border = '1px solid rgba(255,80,80,0.40)' }}
+  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.border = '1px solid rgba(255,255,255,0.15)' }}
+>
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="3 6 5 6 21 6"/>
+    <path d="M19 6l-1 14H6L5 6"/>
+    <path d="M10 11v6M14 11v6"/>
+    <path d="M9 6V4h6v2"/>
+  </svg>
+</button>
             )}
           </div>
         </div>
@@ -305,10 +313,17 @@ input::placeholder { color: rgba(255,255,255,0.58); font-family: 'Georgia', seri
                                 </>
                               )}
                               <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: '11px' }}>{entry.wordCount} words</span>
-                              <button onClick={e => { e.stopPropagation(); deleteEntry(entry.id) }} style={{ background: 'none', border: 'none', color: 'rgba(255,100,100,0.45)', fontSize: '11px', cursor: 'pointer', padding: 0, transition: 'color 0.2s ease' }}
-                                onMouseEnter={e => e.target.style.color = 'rgba(255,100,100,0.90)'}
-                                onMouseLeave={e => e.target.style.color = 'rgba(255,100,100,0.45)'}
-                              >delete</button>
+                              <button onClick={e => { e.stopPropagation(); deleteEntry(entry.id) }} style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '50%', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.2s ease', flexShrink: 0 }}
+  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,80,80,0.20)'; e.currentTarget.style.border = '1px solid rgba(255,80,80,0.40)' }}
+  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.border = '1px solid rgba(255,255,255,0.15)' }}
+>
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="3 6 5 6 21 6"/>
+    <path d="M19 6l-1 14H6L5 6"/>
+    <path d="M10 11v6M14 11v6"/>
+    <path d="M9 6V4h6v2"/>
+  </svg>
+</button>
                             </div>
                           </div>
                           {entry.prompt && <p style={{ color: 'rgba(255,255,255,0.30)', fontSize: '11px', fontStyle: 'italic', margin: '0 0 8px 0', lineHeight: '1.5' }}>"{entry.prompt}"</p>}
