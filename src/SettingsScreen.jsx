@@ -1,11 +1,20 @@
 import { useState, useEffect } from 'react'
 import Background from './Background'
 import { getSoundMode, setSoundMode } from './useAudio'
+import { supabase } from './supabase'
 
-function SettingsScreen({ onBack }) {
+function SettingsScreen({ onBack, user, onSignOut, onSignIn }) {
   const [visible, setVisible] = useState(false)
   const [soundMode, setSoundModeState] = useState(getSoundMode())
   const [cleared, setCleared] = useState(false)
+  const [profile, setProfile] = useState(null)
+
+  useEffect(() => {
+    if (user) {
+      supabase.from('profiles').select('*').eq('id', user.id).single()
+        .then(({ data }) => { if (data) setProfile(data) })
+    }
+  }, [user])
 
   useEffect(() => {
   const timer = setTimeout(() => setVisible(true), 100)
@@ -191,6 +200,27 @@ function SettingsScreen({ onBack }) {
                 Data cleared successfully.
               </div>
             )}
+
+
+            {/* Account */}
+            <Section title="Account">
+              {user ? (
+                <>
+                  <Row label={profile?.name || "Haven User"} sublabel={user.email}>
+                    <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "rgba(140,200,255,0.25)", border: "1px solid rgba(140,200,255,0.40)", display: "flex", alignItems: "center", justifyContent: "center", color: "rgba(200,230,255,0.90)", fontSize: "14px", fontWeight: "500", flexShrink: 0 }}>
+                      {(profile?.name || user.email || "?")[0].toUpperCase()}
+                    </div>
+                  </Row>
+                  <Row label="Sign out" sublabel="You will need to sign in again to access your data">
+                    <button onClick={async () => { await supabase.auth.signOut(); onSignOut() }} style={{ padding: "6px 14px", borderRadius: "14px", border: "1px solid rgba(255,255,255,0.20)", background: "rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.60)", fontSize: "12px", cursor: "pointer", flexShrink: 0 }}>Sign out</button>
+                  </Row>
+                </>
+              ) : (
+                <Row label="Not signed in" sublabel="Sign in to save your data across devices">
+                  <button onClick={onSignIn} style={{ padding: "6px 14px", borderRadius: "14px", border: "1px solid rgba(140,200,255,0.35)", background: "rgba(140,200,255,0.15)", color: "rgba(200,230,255,0.90)", fontSize: "12px", cursor: "pointer", flexShrink: 0 }}>Sign in</button>
+                </Row>
+              )}
+            </Section>
 
             {/* Sound */}
             <Section title="Sound">

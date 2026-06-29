@@ -47,7 +47,7 @@ function getGreeting() {
   return 'Good night'
 }
 
-function HomeScreen({ onNavigate }) {
+function HomeScreen({ onNavigate, user }) {
   return (
     <div style={{
       position: 'relative',
@@ -158,6 +158,17 @@ function HomeScreen({ onNavigate }) {
             />
           ))}
         </div>
+        {!user && (
+  <button
+    onClick={() => onNavigate('auth')}
+    style={{ marginTop: '-32px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 16px', borderRadius: '20px', border: '1px solid rgba(140,200,255,0.30)', background: 'rgba(140,200,255,0.10)', color: 'rgba(200,230,255,0.70)', fontSize: '12px', cursor: 'pointer', backdropFilter: 'blur(12px)', transition: 'all 0.2s ease', letterSpacing: '0.02em' }}
+    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(140,200,255,0.20)'; e.currentTarget.style.color = 'rgba(200,230,255,0.95)' }}
+    onMouseLeave={e => { e.currentTarget.style.background = 'rgba(140,200,255,0.10)'; e.currentTarget.style.color = 'rgba(200,230,255,0.70)' }}
+  >
+    ◎ Sign in to save your progress
+  </button>
+)}
+
       </div>
     </div>
   )

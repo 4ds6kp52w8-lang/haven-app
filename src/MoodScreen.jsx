@@ -177,10 +177,10 @@ function MoodScreen({ onBack }) {
   fontSize: '12px',
   letterSpacing: '0.04em',
   padding: '6px 16px',
-  marginRight: '48px',
-                cursor: 'pointer',
-                backdropFilter: 'blur(12px)'
-              }}
+  cursor: 'pointer',
+  backdropFilter: 'blur(12px)',
+  marginRight: '48px'
+}}
             >
               + Log mood
             </button>
