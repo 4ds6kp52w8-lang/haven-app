@@ -66,27 +66,7 @@ function WelcomeScreen({ onStart, onBack }) {
         justifyContent: 'center',
         zIndex: 1
       }}>
-        {/* Back button */}
-        <button
-          onClick={onBack}
-          style={{
-            position: 'absolute',
-            top: '32px',
-            left: '36px',
-            background: 'none',
-            border: 'none',
-            color: 'rgba(255,255,255,0.50)',
-            fontSize: '13px',
-            cursor: 'pointer',
-            letterSpacing: '0.04em',
-            fontFamily: "'Segoe UI', sans-serif",
-            padding: 0,
-            opacity: textVisible ? 1 : 0,
-            transition: 'opacity 0.85s ease'
-          }}
-        >
-          ← Home
-        </button>
+        {/* Home button handled by floating button in App.jsx */}
         
         {/* Haven wordmark */}
         <div style={{

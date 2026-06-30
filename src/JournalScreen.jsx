@@ -213,9 +213,19 @@ input::placeholder { color: rgba(255,255,255,0.58); font-family: 'Georgia', seri
 
         {/* Header */}
         <div style={{ padding: '22px 36px', borderBottom: '1px solid rgba(255,255,255,0.10)', backdropFilter: 'blur(30px)', background: 'rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0, position: 'relative' }}>
-          <button onClick={view === 'home' ? onBack : () => { setShowReflection(false); setView('home') }} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.55)', fontSize: '13px', cursor: 'pointer', letterSpacing: '0.04em', padding: 0 }}>
-            ← {view === 'home' ? 'Home' : 'Journal'}
-          </button>
+          {view !== 'home' ? (
+  <button onClick={() => {
+    if (view === 'write' && (currentText.trim() || currentTitle.trim())) {
+      const confirmed = window.confirm("You haven't saved this entry yet. Are you sure you want to lose your progress?")
+      if (!confirmed) return
+    }
+    setShowReflection(false)
+    setView('home')
+  }} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.55)', fontSize: '13px', cursor: 'pointer', letterSpacing: '0.04em', padding: 0 }}>
+    ← Journal
+  </button>
+) : <div style={{ width: '60px' }} />}
+
           <span style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', color: 'rgba(255,255,255,0.75)', fontSize: '12px', letterSpacing: '0.22em', textTransform: 'uppercase', fontWeight: '400' }}>Journal</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginRight: '48px' }}>
             {view === 'write' && (
@@ -420,7 +430,7 @@ input::placeholder { color: rgba(255,255,255,0.58); font-family: 'Georgia', seri
                   <div>
                     <input ref={photoInputRef} type="file" accept="image/*" onChange={handlePhotoUpload} style={{ display: 'none' }} />
                     <button onClick={() => photoInputRef.current.click()}
-                      style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: '16px', color: 'rgba(255,255,255,0.75)', fontSize: '11px', padding: '5px 12px', cursor: 'pointer', letterSpacing: '0.04em', transition: 'all 0.2s ease' }}
+                      style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.25)', border: '1px solid rgba(255,255,255,0.25)', borderRadius: '16px', color: 'rgba(255,255,255,0.75)', fontSize: '11px', padding: '5px 12px', cursor: 'pointer', letterSpacing: '0.04em', transition: 'all 0.2s ease' }}
                       onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.75)'; e.currentTarget.style.color = 'rgba(255,255,255,0.90)' }}
                       onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.85)'; e.currentTarget.style.color = 'rgba(255,255,255,0.75)' }}
                     >

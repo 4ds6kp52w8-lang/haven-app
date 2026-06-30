@@ -83,18 +83,19 @@ function HomeScreen({ onNavigate, user }) {
 
         {/* Haven wordmark */}
         <div style={{
-          position: 'absolute',
-          top: '28px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          color: 'rgba(255,255,255,0.50)',
-          fontSize: '11px',
-          letterSpacing: '0.30em',
-          textTransform: 'uppercase',
-          fontWeight: '400'
-        }}>
-          Haven
-        </div>
+  position: 'absolute',
+  top: '36px',
+  left: '50%',
+  transform: 'translateX(-50%)',
+  color: 'rgba(255,255,255,0.75)',
+  fontSize: '12px',
+  letterSpacing: '0.30em',
+  textTransform: 'uppercase',
+  fontFamily: "'Segoe UI', sans-serif",
+  fontWeight: '400'
+}}>
+  Haven
+</div>
 
         {/* Settings icon */}
         <button
@@ -118,52 +119,51 @@ function HomeScreen({ onNavigate, user }) {
         </button>
 
         {/* Greeting */}
-        <h1 style={{
-          color: 'rgba(255,255,255,0.92)',
-          fontSize: 'clamp(1.4rem, 3vw, 2rem)',
-          fontWeight: '300',
-          margin: '0 0 8px 0',
-          letterSpacing: '0.02em',
-          textAlign: 'center',
-          fontFamily: "'Georgia', serif"
-        }}>
-          {getGreeting()}
-        </h1>
+        <div style={{ overflow: 'hidden', marginBottom: '8px' }}>
+  <style>{`
+    @keyframes letterRise {
+      0%   { opacity: 0; transform: translateY(18px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+  `}</style>
+  <h1 style={{ color: 'rgba(255,255,255,0.92)', fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: '300', margin: 0, letterSpacing: '0.02em', textAlign: 'center', fontFamily: "'Georgia', serif", display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
+    {getGreeting().split('').map((char, i) => (
+      <span key={i} style={{ display: 'inline-block', animation: 'letterRise 0.6s ease forwards', animationDelay: `${i * 0.04}s`, opacity: 0 }}>
+        {char === ' ' ? '\u00A0' : char}
+      </span>
+    ))}
+  </h1>
+</div>
 
-        <p style={{
-          color: 'rgba(255,255,255,0.45)',
-          fontSize: '14px',
-          fontWeight: '300',
-          margin: '0 0 52px 0',
-          letterSpacing: '0.04em',
-          textAlign: 'center'
-        }}>
-          What would you like to do today?
-        </p>
+        <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '14px', fontWeight: '300', margin: '0 0 52px 0', letterSpacing: '0.04em', textAlign: 'center', animation: 'letterRise 0.6s ease forwards', animationDelay: `${getGreeting().length * 0.04 + 0.1}s`, opacity: 0 }}>
+  What would you like to do today?
+</p>
 
         {/* Feature grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: '16px',
-          width: '100%',
-          maxWidth: '680px'
-        }}>
-          {features.map((feature, i) => (
-            <FeatureCard
-              key={feature.id}
-              feature={feature}
-              index={i}
-              onClick={() => onNavigate(feature.id)}
-            />
-          ))}
-        </div>
-        {!user && (
+        {/* Feature grid */}
+<div style={{
+  display: 'grid',
+  gridTemplateColumns: 'repeat(3, 1fr)',
+  gap: '16px',
+  width: '100%',
+  maxWidth: '680px'
+}}>
+  {features.map((feature, i) => (
+    <FeatureCard
+      key={feature.id}
+      feature={feature}
+      index={i}
+      onClick={() => onNavigate(feature.id)}
+    />
+  ))}
+</div>
+
+{!user && (
   <button
     onClick={() => onNavigate('auth')}
-    style={{ marginTop: '-32px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 16px', borderRadius: '20px', border: '1px solid rgba(140,200,255,0.30)', background: 'rgba(140,200,255,0.10)', color: 'rgba(200,230,255,0.70)', fontSize: '12px', cursor: 'pointer', backdropFilter: 'blur(12px)', transition: 'all 0.2s ease', letterSpacing: '0.02em' }}
-    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(140,200,255,0.20)'; e.currentTarget.style.color = 'rgba(200,230,255,0.95)' }}
-    onMouseLeave={e => { e.currentTarget.style.background = 'rgba(140,200,255,0.10)'; e.currentTarget.style.color = 'rgba(200,230,255,0.70)' }}
+    style={{ position: 'fixed', bottom: '28px', left: '50%', transform: 'translateX(-50%)', display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 18px', borderRadius: '20px', border: '1px solid rgba(140,200,255,0.30)', background: 'rgba(140,200,255,0.12)', color: 'rgba(200,230,255,0.75)', fontSize: '12px', cursor: 'pointer', backdropFilter: 'blur(16px)', transition: 'all 0.2s ease', letterSpacing: '0.02em', zIndex: 10 }}
+    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(140,200,255,0.22)'; e.currentTarget.style.color = 'rgba(200,230,255,0.95)' }}
+    onMouseLeave={e => { e.currentTarget.style.background = 'rgba(140,200,255,0.12)'; e.currentTarget.style.color = 'rgba(200,230,255,0.75)' }}
   >
     ◎ Sign in to save your progress
   </button>

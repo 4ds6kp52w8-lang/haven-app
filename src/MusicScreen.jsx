@@ -205,20 +205,7 @@ justifyContent: 'space-between',
 flexShrink: 0,
 position: 'relative'
         }}>
-          <button
-            onClick={onBack}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'rgba(255,255,255,0.55)',
-              fontSize: '13px',
-              cursor: 'pointer',
-              letterSpacing: '0.04em',
-              padding: 0
-            }}
-          >
-            ← Home
-          </button>
+          <div style={{ width: '60px' }} />
 
           <span style={{
   position: 'absolute',

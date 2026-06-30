@@ -123,19 +123,7 @@ function ChatScreen({ firstMessage, onBack }) {
           position: 'relative'
         }}>
 
-          <button
-  onClick={onBack}
-  style={{
-    background: 'none', border: 'none',
-    color: 'rgba(255,255,255,0.45)', fontSize: '13px',
-    cursor: 'pointer', letterSpacing: '0.04em',
-    fontFamily: "'Manrope', sans-serif", padding: 0, transition: 'color 0.2s ease'
-  }}
-  onMouseEnter={e => e.target.style.color = 'rgba(255,255,255,0.85)'}
-  onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.45)'}
->
-  ← Home
-</button>
+          <div style={{ width: '60px' }} />
 
 <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', display: 'flex', alignItems: 'center', gap: '8px' }}>
   <span style={{

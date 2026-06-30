@@ -562,12 +562,11 @@ useEffect(() => {
           backdropFilter: 'blur(30px)', background: 'rgba(255,255,255,0.06)',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0
         }}>
-          <button
-            onClick={view === 'home' ? onBack : () => { setPlaying(false); stopAmbient(); setAmbientOn(false); setView('home') }}
-            style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.55)', fontSize: '13px', cursor: 'pointer', letterSpacing: '0.04em', padding: 0 }}
-          >
-            ← {view === 'home' ? 'Home' : 'Sessions'}
-          </button>
+          {view !== 'home' ? (
+  <button onClick={() => { setPlaying(false); stopAmbient(); setAmbientOn(false); setView('home') }} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.55)', fontSize: '13px', cursor: 'pointer', letterSpacing: '0.04em', padding: 0 }}>
+    ← Sessions
+  </button>
+) : <div style={{ width: '60px' }} />}
           <span style={{ color: 'rgba(255,255,255,0.75)', fontSize: '12px', letterSpacing: '0.22em', textTransform: 'uppercase', fontWeight: '400' }}>
             Meditate
           </span>

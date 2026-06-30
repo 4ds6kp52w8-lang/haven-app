@@ -597,13 +597,15 @@ function BreatheScreen({ onBack }) {
 
         {/* Header */}
         <div style={{
-          padding: '28px 36px', borderBottom: '1px solid rgba(255,255,255,0.10)',
+          padding: '37px 36px', borderBottom: '1px solid rgba(255,255,255,0.10)',
           backdropFilter: 'blur(30px)', background: 'rgba(255,255,255,0.06)',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0, position: 'relative'
         }}>
-          <button onClick={handleBack} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.55)', fontSize: '13px', cursor: 'pointer', letterSpacing: '0.04em', padding: 0 }}>
-            ← {backLabel()}
-          </button>
+          {view !== 'home' ? (
+  <button onClick={handleBack} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.55)', fontSize: '13px', cursor: 'pointer', letterSpacing: '0.04em', padding: 0 }}>
+    ← Techniques
+  </button>
+) : <div style={{ width: '80px' }} />}
           <span style={{
   position: 'absolute',
   left: '50%',

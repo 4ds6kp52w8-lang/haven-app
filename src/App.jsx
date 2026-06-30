@@ -75,11 +75,11 @@ function App() {
   }, [])
 
   // Track activity — if user has done anything worth saving
-  useEffect(() => {
-    const journal = localStorage.getItem('haven-journal')
-    const mood = localStorage.getItem('haven-mood')
-    if (journal || mood) setHasActivity(true)
-  }, [screen])
+useEffect(() => {
+  const journal = localStorage.getItem('haven-journal')
+  const mood = localStorage.getItem('haven-mood')
+  setHasActivity(!!(journal || mood))
+}, [screen])
 
   // Show save modal when navigating to home if no account and has activity
 const prevScreenRef = useRef(null)
@@ -139,17 +139,33 @@ useEffect(() => {
           {screen === 'music' && <MusicScreen onBack={() => setScreen('home')} />}
           {screen === 'settings' && <SettingsScreen onBack={() => setScreen(prevScreen)} user={user} onSignOut={() => { setUser(null); setScreen('home') }} onSignIn={() => setShowAuth(true)} />}
 
-          {/* Floating settings button */}
-          {showSettings && (
-            <button
-              onClick={goToSettings}
-              style={{ position: 'fixed', top: '12px', right: '20px', zIndex: 100, background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.18)', borderRadius: '50%', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', backdropFilter: 'blur(12px)', color: 'rgba(255,255,255,0.55)', fontSize: '16px', transition: 'all 0.2s ease' }}
-              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.20)'; e.currentTarget.style.color = 'rgba(255,255,255,0.90)' }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.10)'; e.currentTarget.style.color = 'rgba(255,255,255,0.55)' }}
-            >
-              ⚙
-            </button>
-          )}
+          {/* Floating home button */}
+{screen !== 'home' && showSettings && (
+  <button
+    onClick={() => setScreen('home')}
+    style={{ position: 'fixed', top: '20px', left: '20px', zIndex: 100, background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.18)', borderRadius: '50%', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', backdropFilter: 'blur(12px)', transition: 'all 0.2s ease' }}
+    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.20)' }}
+    onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.10)' }}
+  >
+    <svg width="18" height="18" viewBox="0 0 185.21 185.21" fill="none" stroke="rgba(255,255,255,0.55)" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M26 148 L26 97 L92 42 L159 97 L159 148" />
+      <path d="M70 148 L70 115 C70 107 77 101 92 101 C107 101 114 107 114 115 L114 148" />
+      <path d="M20 97 L92 36 L164 97" />
+    </svg>
+  </button>
+)}
+
+{/* Floating settings button */}
+{showSettings && (
+  <button
+    onClick={goToSettings}
+    style={{ position: 'fixed', top: '20px', right: '20px', zIndex: 100, background: 'rgba(255,255,255,0.10)', border: '1px solid rgba(255,255,255,0.18)', borderRadius: '50%', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', backdropFilter: 'blur(12px)', color: 'rgba(255,255,255,0.55)', fontSize: '16px', transition: 'all 0.2s ease' }}
+    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.20)'; e.currentTarget.style.color = 'rgba(255,255,255,0.90)' }}
+    onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.10)'; e.currentTarget.style.color = 'rgba(255,255,255,0.55)' }}
+  >
+    ⚙
+  </button>
+)}
 
           {/* Save progress modal */}
           {showSaveModal && (
